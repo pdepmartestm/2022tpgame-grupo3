@@ -2,8 +2,6 @@ import wollok.game.*
 import piezas.*
 import tetris.*
 
-
-//Usado para bloques moviles y para bloques que fueron desactivados
 class Bloque {
 	
 	var activo = true	
@@ -48,13 +46,6 @@ class Pieza {
 	method instanciar(pieza, x, y){
 		bloquesActivos = pieza.instanciar(x, y)		
 		bloquePrincipal = bloquesActivos.first()
-		
-		//Si no hay espacio para otro bloque es que esta en derrota
-//		if(!self.comprobarDerrota()){
-//			logicaPrincipal.activarDerrota()
-//			console.println("Derrota")
-//		}
-		// Lo dibujo de todos modos para demostrar que se superponen
 		bloquesActivos.forEach({bloque =>
 			game.addVisual(bloque)
 		})
@@ -79,8 +70,6 @@ class Pieza {
 	
 	method ver(x, y) = bloquesActivos.all({bloque => bloque.ver(x,y)})
 	
-	//Como el ver normal todavia se utiliza para girar, no lo puedo reemplazar para la optimizacion.
-	//El verOptimizado se utiliza para bajar bloques, ya que solo se fija los bloques mas bajos por columna de la pieza
 	method verOptimizado(x,y) = bloquesBajos.all({bloque => bloque.ver(x,y)})
 	
 	method mover(x, y){
@@ -130,27 +119,26 @@ class Pieza {
 		})	
 		return bloqueMasBajo
 	}
-	
+	method multiplicador()=1
 	method girar(){
 		const centroX = bloquePrincipal.columna()
 		const centroY = bloquePrincipal.fila()
 		var valido = true
 		bloquesActivos.forEach({bloque => 
-			if(!bloque.verEn(centroX+(bloque.fila()-centroY), centroY+(centroX-bloque.columna()))){
+			if(!bloque.verEn(centroX+self.multiplicador()*(bloque.fila()-centroY), centroY+self.multiplicador()*(centroX-bloque.columna()))){
 				valido = false
 			}
 		})	
 		if(valido){
 			bloquesActivos.forEach({bloque =>
-				bloque.moverA(centroX+(bloque.fila()-centroY), centroY+(centroX-bloque.columna()))
+				bloque.moverA(centroX+self.multiplicador()*(bloque.fila()-centroY), centroY+self.multiplicador()*(centroX-bloque.columna()))
 			})
 		}
 		
-		//Calculo los bloques bajos durante la rotacion para hacer lo menos posible durante la caida (ya que es uno de los momentos computacionalmente mas pesados)
 		self.obtenerBloquesBajos()
 	}
 	
-	//Obtengo las columnas que abarca la pieza
+
 	method obtenerColumnas(){
 		const columnas = #{}
 		bloquesActivos.forEach({bloque =>
@@ -160,12 +148,6 @@ class Pieza {
 		return columnas
 	}
 	
-	//Obtengo los bloques mas bajos por cada columna para despues hacer el calculo cuando baja la pieza (no es necesario saber si los bloque mas altos colisionan con algo al bajar)
-	//Si fuera a agregar bloques convexos no se podria hacer esta optimizacion
-	//Ejemplo de un bloque convexo
-	// **
-	//  *
-	// **
 	method obtenerBloquesBajos(){
 		bloquesBajos = []
 		self.obtenerColumnas().forEach({columna =>
@@ -177,7 +159,6 @@ class Pieza {
 		})
 	}
 	
-	//Se utiliza en la logica principal para una optimizacion de tiro
 	method obtenerBloquesAltos(){
 		return self.obtenerColumnas().forEach({columna =>
 			bloquesBajos.add(bloquesActivos.filter({bloque => 
@@ -218,6 +199,7 @@ class PiezaLoca inherits Pieza{
 }
 
 class PiezaGiroInvertido inherits Pieza{
+		override method multiplicador()=-1
 		override method instanciar(pieza, x, y){
 		
 		var colorOriginal = pieza.color()
@@ -235,22 +217,22 @@ class PiezaGiroInvertido inherits Pieza{
 		
 		pieza.color(colorOriginal) // Le devuelve el color original a la pieza modificada
 	}
-		method girar(){
-		const centroX = bloquePrincipal.columna()
-		const centroY = bloquePrincipal.fila()
-		var valido = true
-		bloquesActivos.forEach({bloque => 
-			if(!bloque.verEn(centroX-(bloque.fila()-centroY), centroY-(centroX-bloque.columna()))){
-				valido = false
-			}
-		})	
-		if(valido){
-			bloquesActivos.forEach({bloque =>
-				bloque.moverA(centroX-(bloque.fila()-centroY), centroY-(centroX-bloque.columna()))
-			})
-		}
-		
-		//Calculo los bloques bajos durante la rotacion para hacer lo menos posible durante la caida (ya que es uno de los momentos computacionalmente mas pesados)
-		self.obtenerBloquesBajos()
-	}
+//		method girar(){
+//		const centroX = bloquePrincipal.columna()
+//		const centroY = bloquePrincipal.fila()
+//		var valido = true
+//		bloquesActivos.forEach({bloque => 
+//			if(!bloque.verEn(centroX-(bloque.fila()-centroY), centroY-(centroX-bloque.columna()))){
+//				valido = false
+//			}
+//		})	
+//		if(valido){
+//			bloquesActivos.forEach({bloque =>
+//				bloque.moverA(centroX-(bloque.fila()-centroY), centroY-(centroX-bloque.columna()))
+//			})
+//		}
+//		
+//		//Calculo los bloques bajos durante la rotacion para hacer lo menos posible durante la caida (ya que es uno de los momentos computacionalmente mas pesados)
+//		self.obtenerBloquesBajos()
+//	}
 }
