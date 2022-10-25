@@ -1,0 +1,11 @@
+import wollok.game.*
+import gameManager2.gameManager
+
+///////// PROGRAM /////////
+
+program juego { 	
+	gameManager.inicializar() // fija ciertas constantes (fondo, ancho, alto, etc)
+	//game.boardGround("fondo.png")
+	gameManager.mostrarMenu()
+	game.start()
+}
