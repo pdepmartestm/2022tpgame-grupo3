@@ -1,22 +1,7 @@
-# Nombre del juego (<- borrar y completar)
+Tetris para Wollok game
 
-## Equipo de desarrollo
+Flechas Izquierda - Derecha para mover la pieza.
+Flecha arriba para girar para mover la pieza.
+Flecha abajo para tirar para mover la pieza.
 
-- Alguien
-- Persona
-- etc.
-
-## Capturas
-
-(agregar)
-
-## Reglas de Juego / Instrucciones
-
-(Escribirlas)
-
-
-## Otros
-
-- Curso/Facultad
-- Versión de wollok
-- Una vez terminado, no tenemos problemas en que el repositorio sea público / queremos manternerlo privado
+[Image description](https://i.imgflip.com/10aiqe.jpg)

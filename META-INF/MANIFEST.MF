@@ -1,10 +1,9 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: proyectoBase
 Bundle-ManifestVersion: 2
-Bundle-Name: proyectoBase
+Bundle-Name: juegoTest1
 Bundle-Vendor: My Company
 Bundle-Version: 1.0.0.qualifier
-Bundle-SymbolicName: juego;singleton:=true
+Bundle-SymbolicName: juegoTest1; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.ibm.icu,
  org.eclipse.xtext,
